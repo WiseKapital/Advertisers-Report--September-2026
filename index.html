@@ -296,7 +296,7 @@ function selSummary(){
   return DATA.summary.filter(s => state.advs.has(s.adv));
 }
 
-/* ---------- 0. Top Cards (Con proyección Run Rate a 30 días) ---------- */
+/* ---------- 0. Top Cards (Con KPIs actualizados y Run Rate a 30 días) ---------- */
 function renderCards(){
   const tot = DATA.brands.reduce((a, r) => ({
     signups: a.signups + r.signups,
@@ -306,12 +306,13 @@ function renderCards(){
     profit: a.profit + (r.revenue - r.budget)
   }), {signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0});
 
-  // Factor Run Rate: (Total actual / 2 días) * 30 días de Septiembre
+  // Factor Run Rate: (Total actual / 2 días transcurridos) * 30 días de Septiembre
   const factor = DATA.daysInMonth / DATA.daysElapsed;
 
+  // Nuevos KPIs actualizados
   const kpi = {
-    signups: 1750,
-    ftd: 360,
+    signups: 1850, // Actualizado a 1850
+    ftd: 370,      // Actualizado a 370
     revenue: 23100,
     profit: 15400
   };
@@ -381,7 +382,7 @@ function renderCards(){
     </div>`).join('');
 }
 
-/* ---------- 1. Daily Performance Chart (Septiembre 1-2) ---------- */
+/* ---------- 1. Daily Performance Chart (Septiembre 1-2 con nuevos KPIs) ---------- */
 function renderDaily(){
   const days = DATA.daily.dates;
   const reg = DATA.daily.reg;
@@ -392,10 +393,10 @@ function renderDaily(){
   const avg = arr => arr.reduce((a,b) => a + b, 0) / n;
   const f1 = v => (Math.round(v * 10) / 10).toLocaleString('en-US');
 
-  // Metas diarias para Septiembre (30 días)
-  const kpiSignupsDay = 1750 / 30; // 58.3
-  const kpiFtdDay = 360 / 30;       // 12.0
-  const kpiRevDay = 23100 / 30;     // 770
+  // Metas diarias para Septiembre (30 días) calculadas con los nuevos KPIs
+  const kpiSignupsDay = 1850 / 30; // 61.7/día
+  const kpiFtdDay = 370 / 30;       // 12.3/día
+  const kpiRevDay = 23100 / 30;     // 770/día
 
   const dashed = (label, color, val, yAxisID) => ({
     label,
