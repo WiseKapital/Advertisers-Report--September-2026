@@ -156,9 +156,9 @@
     </div>
   </div>
 
-  <!-- ==================== 5. TABLA: ADVERTISERS PER BRAND ==================== -->
+  <!-- ==================== 5. TABLA: PERFORMANCE PER BRAND ==================== -->
   <div class="panel">
-    <h3>Advertisers per brand</h3>
+    <h3>Performance per brand</h3>
     <table id="brandTable">
       <thead>
         <tr class="sub">
@@ -199,8 +199,8 @@
 
 <script>
 const DATA = {
-  "daysElapsed": 2,     // 1 y 2 de Septiembre
-  "daysInMonth": 30,     // Septiembre tiene 30 días
+  "daysElapsed": 2,
+  "daysInMonth": 30,
   "summary": [
     {"adv": "ACEBET", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
     {"adv": "AFF 66", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
@@ -250,12 +250,11 @@ const DATA = {
     {"brand": "Pirates LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 18.00},
     {"brand": "Betnjet", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 190.00}
   ],
-  // Datos diarios para Sep 1 y Sep 2 (Total: 73 signups, 2 FTDs, $290 revenue)
   "daily": {
     "dates": ["Sep 1", "Sep 2"],
-    "reg":   [35, 38],    // 35 + 38 = 73
-    "ftd":   [1, 1],      // 1 + 1 = 2
-    "rev":   [150, 140]   // 150 + 140 = 290
+    "reg":   [35, 38],
+    "ftd":   [1, 1],
+    "rev":   [150, 140]
   }
 };
 
@@ -296,7 +295,7 @@ function selSummary(){
   return DATA.summary.filter(s => state.advs.has(s.adv));
 }
 
-/* ---------- 0. Top Cards (Con KPIs actualizados y Run Rate a 30 días) ---------- */
+/* ---------- 0. Top Cards ---------- */
 function renderCards(){
   const tot = DATA.brands.reduce((a, r) => ({
     signups: a.signups + r.signups,
@@ -306,13 +305,11 @@ function renderCards(){
     profit: a.profit + (r.revenue - r.budget)
   }), {signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0});
 
-  // Factor Run Rate: (Total actual / 2 días transcurridos) * 30 días de Septiembre
   const factor = DATA.daysInMonth / DATA.daysElapsed;
 
-  // Nuevos KPIs actualizados
   const kpi = {
-    signups: 1850, // Actualizado a 1850
-    ftd: 370,      // Actualizado a 370
+    signups: 1850,
+    ftd: 370,
     revenue: 23100,
     profit: 15400
   };
@@ -382,7 +379,7 @@ function renderCards(){
     </div>`).join('');
 }
 
-/* ---------- 1. Daily Performance Chart (Septiembre 1-2 con nuevos KPIs) ---------- */
+/* ---------- 1. Daily Performance Chart ---------- */
 function renderDaily(){
   const days = DATA.daily.dates;
   const reg = DATA.daily.reg;
@@ -393,7 +390,6 @@ function renderDaily(){
   const avg = arr => arr.reduce((a,b) => a + b, 0) / n;
   const f1 = v => (Math.round(v * 10) / 10).toLocaleString('en-US');
 
-  // Metas diarias para Septiembre (30 días) calculadas con los nuevos KPIs
   const kpiSignupsDay = 1850 / 30; // 61.7/día
   const kpiFtdDay = 370 / 30;       // 12.3/día
   const kpiRevDay = 23100 / 30;     // 770/día
@@ -630,7 +626,7 @@ function renderProfit(){
   });
 }
 
-/* ---------- 7. Advertisers per brand Table ---------- */
+/* ---------- 7. Performance per brand Table ---------- */
 function renderBrands(){
   const s = DATA.brands.map(x => ({...x, profit: x.revenue - x.budget}));
   const s2p = r => r.ftd > 0 ? '1:' + fmtInt(r.signups / r.ftd) : '—';
