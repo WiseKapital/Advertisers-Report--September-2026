@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertiser Report August 1-26</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --ink: #111827;
+      --muted: #8a94a6;
+      --blue: #2f6fed;
+      --green: #16a34a;
+      --red: #dc2626;
+      --orange: #f59e0b;
+      --pink: #ec4899;
+      --teal: #0ea5e9;
+      --line: #eceef2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Inter, Roboto, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      padding: 22px 26px 40px;
+    }
+
+    .wrap {
+      max-width: 1560px;
+      margin: 0 auto;
+    }
+
+    h2.main-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 6px 0 20px;
+      color: var(--ink);
+      letter-spacing: 0.5px;
+    }
+
+    /* Tarjetas KPI Superiores (Exactas a la captura) */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 1px 3px rgba(16, 24, 40, .05);
+      min-height: 118px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card .lbl {
+      font-size: 11px;
+      letter-spacing: .6px;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .card .val {
+      font-size: 32px;
+      font-weight: 750;
+      margin-top: 8px;
+    }
+
+    .card .val.red {
+      color: var(--red);
+    }
+
+    .card .val.green {
+      color: var(--green);
+    }
+
+    .card .accent {
+      height: 3px;
+      width: 52px;
+      border-radius: 2px;
+      margin-top: 10px;
+    }
+
+    .card .sub {
+      margin-top: auto;
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .card .sub b {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .card .sub b.green {
+      color: var(--green);
+    }
+
+    .card .sub b.red {
+      color: var(--red);
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 1px 3px rgba(16, 24, 40, .05);
+      margin-bottom: 16px;
+    }
+
+    .panel h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .panel .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      border: 1px solid #d7dce4;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .toggle button {
+      border: 0;
+      background: #fff;
+      padding: 5px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--ink);
+    }
+
+    .toggle button.active {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    thead .sub th {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tbody td {
+      border-bottom: 1px solid var(--line);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .pos {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .neg {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    tr.total-row td {
+      font-weight: 700;
+      background: #fafbfc;
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .bar-wrap {
+      position: relative;
+      height: 260px;
+    }
+
+    .top5 td,
+    .top5 th {
+      padding: 7px 10px;
+    }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width:1100px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- Chart.js v4.4.3 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <h2 class="main-title">ADVERTISER REPORT September 01-02</h2>
+
+    <!-- ==================== 0. TARJETAS SUPERIORES CON KPIS ==================== -->
+    <div class="cards" id="cards"></div>
+
+    <!-- ==================== 1. TABLA PRINCIPAL: ADVERTISER REPORT ==================== -->
+    <div class="panel">
+      <h3>Advertiser Report</h3>
+      <table id="summaryTable">
+        <thead>
+          <tr class="sub">
+            <th style="text-align:left">Advertiser</th>
+            <th>Signups</th>
+            <th>FTD</th>
+            <th>Revenue</th>
+            <th>Budget</th>
+            <th>Profit</th>
+            <th>S2P</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- ==================== 2. TABLAS TOP 5 ==================== -->
+    <div class="grid2">
+      <div class="panel">
+        <h3>Top 5 Advertiser by Revenue</h3>
+        <table class="top5" id="topRev">
+          <thead>
+            <tr class="sub">
+              <th style="text-align:left">#</th>
+              <th style="text-align:left">Advertiser</th>
+              <th>Revenue</th>
+              <th>Budget</th>
+              <th>Profit</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Top 5 Advertisers by Budget</h3>
+        <table class="top5" id="topBud">
+          <thead>
+            <tr class="sub">
+              <th style="text-align:left">#</th>
+              <th style="text-align:left">Advertiser</th>
+              <th>Budget</th>
+              <th>Revenue</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== 3. GRÁFICAS ADVERTISERS ==================== -->
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Country Performance</h3>
+            <div class="hint" id="ctyHint">Top countries by revenue.</div>
+          </div>
+          <div class="toggle" id="ctyToggle">
+            <button data-m="revenue" class="active">Revenue</button>
+            <button data-m="reg">Reg</button>
+          </div>
+        </div>
+        <div class="bar-wrap"><canvas id="chCountry"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Advertiser Performance</h3>
+            <div class="hint">High-level advertiser / network leaderboard.</div>
+          </div>
+          <div class="toggle" id="advToggle">
+            <button data-m="reg" class="active">Reg</button>
+            <button data-m="ftd">FTD</button>
+            <button data-m="revenue">Revenue</button>
+          </div>
+        </div>
+        <div class="bar-wrap"><canvas id="chAdv"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>Budget by Advertiser</h3>
+        <div class="hint">Budget per advertiser in the selected period.</div>
+        <div class="bar-wrap"><canvas id="chBudget"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Profit by Advertiser</h3>
+        <div class="hint">Profit per advertiser in the selected period.</div>
+        <div class="bar-wrap"><canvas id="chProfit"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ==================== 4. TABLA: ADVERTISERS PER BRAND ==================== -->
+    <div class="panel">
+      <h3>Advertisers per brand</h3>
+      <table id="brandTable">
+        <thead>
+          <tr class="sub">
+            <th style="text-align:left">Brand</th>
+            <th>Signups</th>
+            <th>FTD</th>
+            <th>Revenue</th>
+            <th>Budget</th>
+            <th>Profit</th>
+            <th>S2P</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- ==================== 5. GRÁFICAS: BRANDS ==================== -->
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3>Brand Performance</h3>
+            <div class="hint" id="brandHint">Top brands by signups.</div>
+          </div>
+          <div class="toggle" id="brandToggle">
+            <button data-m="signups" class="active">Signups</button>
+            <button data-m="ftd">FTD</button>
+            <button data-m="revenue">Revenue</button>
+          </div>
+        </div>
+        <div class="bar-wrap"><canvas id="chBrand"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3>Profit by Brand</h3>
+        <div class="hint">Net profit / loss per brand in the selected period.</div>
+        <div class="bar-wrap"><canvas id="chBrandProfit"></canvas></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DATA = {
+      "summary": [
+        { "adv": "ACEBET", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "AFF 66", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "ALL IN AFFILIATES", "signups": 9, "ftd": 0, "revenue": 0.00, "budget": 190.00 },
+        { "adv": "BASHER AGENCY", "signups": 5, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "CHANCED", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "COINSROYALE", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "EPC", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "GAMETIME DIGITAL", "signups": 52, "ftd": 2, "revenue": 290.00, "budget": 0.00 },
+        { "adv": "IMPACT", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "adv": "SPLASH", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 }
+      ],
+      "country": {
+        "GAMETIME DIGITAL": { "US": [52, 290.00] },
+        "ALL IN AFFILIATES": { "NZ": [5, 0.00], "CA": [4, 0.00] },
+        "BASHER AGENCY": { "US": [5, 0.00] }
+      },
+      "brands": [
+        { "brand": "Baba", "signups": 2, "ftd": 1, "revenue": 150.00, "budget": 0.00 },
+        { "brand": "WiseSpin", "signups": 3, "ftd": 1, "revenue": 140.00, "budget": 0.00 },
+        { "brand": "Acebet", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "7Bit Casino", "signups": 4, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Bonusclubs", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "CardCrush", "signups": 12, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Casino Smartlink", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Baba", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Coins Royale", "signups": 7, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "ChipNWin", "signups": 1, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "FS Casino", "signups": 5, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Dorados", "signups": 1, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "High5Casino", "signups": 1, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Chanced Punt", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Wannnasee USA LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "LavishLuck", "signups": 28, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Luckyvibe", "signups": 2, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "LuckyZino Sweepstakes Casino", "signups": 3, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Sixty6+jungle", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "PrizeFlow Luckybunny", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Smash Casino", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "PrizeFlow sweeps LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Zunado", "signups": 1, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Spin2Win sweeps LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "The Boss", "signups": 3, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "SuperSlotz sweeps", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "splashcoins", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Winning4Fun", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00 },
+        { "brand": "Pirates LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 18.00 },
+        { "brand": "Betnjet", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 190.00 }
+      ]
+    };
+
+    const fmtInt = v => Math.round(v).toLocaleString('en-US');
+    const fmtMoney = v => (v < 0 ? '-$' : '$') + fmtInt(Math.abs(v));
+    const moneyCls = v => v < 0 ? 'neg' : (v > 0 ? 'pos' : '');
+
+    const state = {
+      advs: new Set(DATA.summary.map(s => s.adv)),
+      ctyMetric: 'revenue',
+      advMetric: 'reg',
+      brandMetric: 'signups'
+    };
+
+    const palette = ['#2f6fed', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#06b6d4', '#f97316', '#ef4444', '#84cc16', '#6366f1'];
+    let charts = {};
+
+    function mkChart(id, cfg) {
+      if (charts[id]) charts[id].destroy();
+      charts[id] = new Chart(document.getElementById(id), cfg);
+    }
+
+    const hbarOpts = (money) => ({
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => money ? fmtMoney(c.parsed.x) : fmtInt(c.parsed.x) } }
+      },
+      scales: {
+        x: { grid: { color: '#f0f1f4' }, ticks: { callback: (v) => money ? '$' + fmtInt(v) : fmtInt(v) } },
+        y: { grid: { display: false } }
+      }
+    });
+
+    function selSummary() {
+      return DATA.summary.filter(s => state.advs.has(s.adv));
+    }
+
+    /* ---------- 0. Top Cards (Exacto a la captura con KPIs) ---------- */
+    function renderCards() {
+      const tot = DATA.brands.reduce((a, r) => ({
+        signups: a.signups + r.signups,
+        ftd: a.ftd + r.ftd,
+        revenue: a.revenue + r.revenue,
+        budget: a.budget + r.budget,
+        profit: a.profit + (r.revenue - r.budget)
+      }), { signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0 });
+
+      // KPIs solicitados
+      const kpi = {
+        signups: 1750,
+        ftd: 360,
+        revenue: 23100,
+        profit: 15400
+      };
+
+      const defs = [
+        {
+          lbl: 'REGISTRATIONS',
+          val: fmtInt(tot.signups),
+          accent: 'var(--pink)',
+          sub: {
+            kpi: fmtInt(kpi.signups),
+            rr: fmtInt(tot.signups),
+            rrCls: tot.signups >= kpi.signups ? 'green' : 'red'
+          }
+        },
+        {
+          lbl: 'FTD',
+          val: fmtInt(tot.ftd),
+          accent: 'var(--pink)',
+          sub: {
+            kpi: fmtInt(kpi.ftd),
+            rr: fmtInt(tot.ftd),
+            rrCls: tot.ftd >= kpi.ftd ? 'green' : 'red'
+          }
+        },
+        {
+          lbl: 'REVENUE',
+          val: fmtMoney(tot.revenue),
+          accent: 'var(--orange)',
+          sub: {
+            kpi: fmtMoney(kpi.revenue),
+            rr: fmtMoney(tot.revenue),
+            rrCls: tot.revenue >= kpi.revenue ? 'green' : 'red'
+          }
+        },
+        {
+          lbl: 'PROFIT',
+          val: fmtMoney(tot.profit),
+          accent: 'var(--pink)',
+          sub: {
+            kpi: fmtMoney(kpi.profit),
+            rr: fmtMoney(tot.profit),
+            rrCls: tot.profit >= kpi.profit ? 'green' : 'red'
+          }
+        }
+      ];
+
+      document.getElementById('cards').innerHTML = defs.map(d => `
+    <div class="card">
+      <div class="lbl">${d.lbl}</div>
+      <div class="val">${d.val}</div>
+      <div class="accent" style="background:${d.accent}"></div>
+      <div class="sub">
+        <span>KPI<br>Run rate</span>
+        <span style="text-align:right">
+          <b>${d.sub.kpi}</b><br>
+          <b class="${d.sub.rrCls}">${d.sub.rr}</b>
+        </span>
+      </div>
+    </div>`).join('');
+    }
+
+    /* ---------- 1. Advertiser Report Table ---------- */
+    function renderSummary() {
+      const s = selSummary()
+        .map(x => ({ ...x, profit: x.revenue - x.budget }))
+        .sort((a, b) => b.revenue - a.revenue || b.signups - a.signups || b.budget - a.budget);
+
+      const s2p = r => r.ftd > 0 ? '1:' + fmtInt(r.signups / r.ftd) : '—';
+      const tot = s.reduce((a, r) => ({
+        signups: a.signups + r.signups,
+        ftd: a.ftd + r.ftd,
+        revenue: a.revenue + r.revenue,
+        budget: a.budget + r.budget,
+        profit: a.profit + r.profit
+      }), { signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0 });
+
+      document.querySelector('#summaryTable tbody').innerHTML = s.map(r => `
+    <tr>
+      <td style="text-align:left">${r.adv}</td>
+      <td class="num">${fmtInt(r.signups)}</td>
+      <td class="num">${fmtInt(r.ftd)}</td>
+      <td class="num ${moneyCls(r.revenue)}">${fmtMoney(r.revenue)}</td>
+      <td class="num ${moneyCls(r.budget)}">${fmtMoney(r.budget)}</td>
+      <td class="num ${moneyCls(r.profit)}">${fmtMoney(r.profit)}</td>
+      <td class="num">${s2p(r)}</td>
+    </tr>`).join('') + `
+    <tr class="total-row">
+      <td style="text-align:left">Grand total</td>
+      <td class="num">${fmtInt(tot.signups)}</td>
+      <td class="num">${fmtInt(tot.ftd)}</td>
+      <td class="num ${moneyCls(tot.revenue)}">${fmtMoney(tot.revenue)}</td>
+      <td class="num ${moneyCls(tot.budget)}">${fmtMoney(tot.budget)}</td>
+      <td class="num ${moneyCls(tot.profit)}">${fmtMoney(tot.profit)}</td>
+      <td class="num">${tot.ftd > 0 ? '1:' + fmtInt(tot.signups / tot.ftd) : '—'}</td>
+    </tr>`;
+    }
+
+    /* ---------- 2. Top 5 Tables ---------- */
+    function renderTop5() {
+      const s = selSummary().map(x => ({ ...x, profit: x.revenue - x.budget }));
+
+      const byRev = s.slice().sort((a, b) => b.revenue - a.revenue || b.signups - a.signups).slice(0, 5);
+      document.querySelector('#topRev tbody').innerHTML = byRev.map((r, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td style="text-align:left">${r.adv}</td>
+      <td class="num ${moneyCls(r.revenue)}">${fmtMoney(r.revenue)}</td>
+      <td class="num ${moneyCls(r.budget)}">${fmtMoney(r.budget)}</td>
+      <td class="num ${moneyCls(r.profit)}">${fmtMoney(r.profit)}</td>
+    </tr>`).join('');
+
+      const byBud = s.slice().sort((a, b) => b.budget - a.budget || b.revenue - a.revenue).slice(0, 5);
+      document.querySelector('#topBud tbody').innerHTML = byBud.map((r, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td style="text-align:left">${r.adv}</td>
+      <td class="num ${moneyCls(r.budget)}">${fmtMoney(r.budget)}</td>
+      <td class="num ${moneyCls(r.revenue)}">${fmtMoney(r.revenue)}</td>
+      <td class="num ${moneyCls(r.budget)}">${fmtMoney(r.budget)}</td>
+    </tr>`).join('');
+    }
+
+    /* ---------- 3. Country Chart ---------- */
+    function renderCountry() {
+      const agg = {};
+      for (const adv of state.advs) {
+        const cc = DATA.country[adv] || {};
+        for (const [cty, v] of Object.entries(cc)) {
+          if (!agg[cty]) agg[cty] = { reg: 0, revenue: 0 };
+          agg[cty].reg += v[0];
+          agg[cty].revenue += v[1];
+        }
+      }
+      const m = state.ctyMetric;
+      const rows = Object.entries(agg)
+        .map(([c, v]) => ({ c, val: m === 'revenue' ? v.revenue : v.reg }))
+        .sort((a, b) => b.val - a.val);
+
+      document.getElementById('ctyHint').textContent =
+        (m === 'revenue' ? 'Top countries by revenue. ' : 'Top countries by registrations. ') +
+        rows.length + ' countries have data - switch metric to see more.';
+
+      mkChart('chCountry', {
+        type: 'bar',
+        data: {
+          labels: rows.map(r => r.c),
+          datasets: [{
+            data: rows.map(r => r.val),
+            backgroundColor: rows.map((_, i) => palette[i % palette.length]),
+            borderRadius: 4,
+            barThickness: 16
+          }]
+        },
+        options: hbarOpts(m === 'revenue')
+      });
+    }
+
+    /* ---------- 4. Advertiser Performance Chart ---------- */
+    function renderAdvPerf() {
+      const m = state.advMetric;
+      const rows = selSummary()
+        .map(s => ({ adv: s.adv, val: m === 'reg' ? s.signups : m === 'ftd' ? s.ftd : s.revenue }))
+        .sort((a, b) => b.val - a.val);
+
+      mkChart('chAdv', {
+        type: 'bar',
+        data: {
+          labels: rows.map(r => r.adv),
+          datasets: [{
+            data: rows.map(r => r.val),
+            backgroundColor: rows.map((_, i) => palette[i % palette.length]),
+            borderRadius: 4,
+            barThickness: 14
+          }]
+        },
+        options: hbarOpts(m === 'revenue')
+      });
+    }
+
+    /* ---------- 5. Budget & Profit Charts ---------- */
+    function renderBudget() {
+      const rows = selSummary().slice().sort((a, b) => b.budget - a.budget);
+      mkChart('chBudget', {
+        type: 'bar',
+        data: {
+          labels: rows.map(r => r.adv),
+          datasets: [{
+            data: rows.map(r => r.budget),
+            backgroundColor: rows.map((_, i) => palette[i % palette.length]),
+            borderRadius: 4,
+            barThickness: 14
+          }]
+        },
+        options: hbarOpts(true)
+      });
+    }
+
+    function renderProfit() {
+      const rows = selSummary()
+        .map(s => ({ ...s, profit: s.revenue - s.budget }))
+        .sort((a, b) => b.profit - a.profit);
+
+      mkChart('chProfit', {
+        type: 'bar',
+        data: {
+          labels: rows.map(r => r.adv),
+          datasets: [{
+            data: rows.map(r => r.profit),
+            backgroundColor: rows.map(r => r.profit < 0 ? '#dc2626' : '#16a34a'),
+            borderRadius: 4,
+            barThickness: 14
+          }]
+        },
+        options: hbarOpts(true)
+      });
+    }
+
+    /* ---------- 6. Advertisers per brand Table ---------- */
+    function renderBrands() {
+      const s = DATA.brands.map(x => ({ ...x, profit: x.revenue - x.budget }));
+      const s2p = r => r.ftd > 0 ? '1:' + fmtInt(r.signups / r.ftd) : '—';
+      const tot = s.reduce((a, r) => ({
+        signups: a.signups + r.signups,
+        ftd: a.ftd + r.ftd,
+        revenue: a.revenue + r.revenue,
+        budget: a.budget + r.budget,
+        profit: a.profit + r.profit
+      }), { signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0 });
+
+      document.querySelector('#brandTable tbody').innerHTML = s.map(r => `
+    <tr>
+      <td style="text-align:left">${r.brand}</td>
+      <td class="num">${fmtInt(r.signups)}</td>
+      <td class="num">${fmtInt(r.ftd)}</td>
+      <td class="num ${moneyCls(r.revenue)}">${fmtMoney(r.revenue)}</td>
+      <td class="num ${moneyCls(r.budget)}">${fmtMoney(r.budget)}</td>
+      <td class="num ${moneyCls(r.profit)}">${fmtMoney(r.profit)}</td>
+      <td class="num">${s2p(r)}</td>
+    </tr>`).join('') + `
+    <tr class="total-row">
+      <td style="text-align:left">Grand total</td>
+      <td class="num">${fmtInt(tot.signups)}</td>
+      <td class="num">${fmtInt(tot.ftd)}</td>
+      <td class="num ${moneyCls(tot.revenue)}">${fmtMoney(tot.revenue)}</td>
+      <td class="num ${moneyCls(tot.budget)}">${fmtMoney(tot.budget)}</td>
+      <td class="num ${moneyCls(tot.profit)}">${fmtMoney(tot.profit)}</td>
+      <td class="num">${tot.ftd > 0 ? '1:' + fmtInt(tot.signups / tot.ftd) : '—'}</td>
+    </tr>`;
+    }
+
+    /* ---------- 7. Brand Charts ---------- */
+    function getAggBrands() {
+      const agg = {};
+      DATA.brands.forEach(b => {
+        if (!agg[b.brand]) agg[b.brand] = { signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0 };
+        agg[b.brand].signups += b.signups;
+        agg[b.brand].ftd += b.ftd;
+        agg[b.brand].revenue += b.revenue;
+        agg[b.brand].budget += b.budget;
+        agg[b.brand].profit += (b.revenue - b.budget);
+      });
+      return Object.entries(agg).map(([brand, val]) => ({ brand, ...val }));
+    }
+
+    function renderBrandPerf() {
+      const m = state.brandMetric;
+      const list = getAggBrands()
+        .map(b => ({ brand: b.brand, val: m === 'signups' ? b.signups : m === 'ftd' ? b.ftd : b.revenue }))
+        .filter(b => b.val > 0)
+        .sort((a, b) => b.val - a.val);
+
+      document.getElementById('brandHint').textContent = `Top active brands by ${m}.`;
+
+      mkChart('chBrand', {
+        type: 'bar',
+        data: {
+          labels: list.map(r => r.brand),
+          datasets: [{
+            data: list.map(r => r.val),
+            backgroundColor: list.map((_, i) => palette[i % palette.length]),
+            borderRadius: 4,
+            barThickness: 14
+          }]
+        },
+        options: hbarOpts(m === 'revenue')
+      });
+    }
+
+    function renderBrandProfit() {
+      const list = getAggBrands()
+        .filter(b => b.profit !== 0)
+        .sort((a, b) => b.profit - a.profit);
+
+      mkChart('chBrandProfit', {
+        type: 'bar',
+        data: {
+          labels: list.map(r => r.brand),
+          datasets: [{
+            data: list.map(r => r.profit),
+            backgroundColor: list.map(r => r.profit < 0 ? '#dc2626' : '#16a34a'),
+            borderRadius: 4,
+            barThickness: 14
+          }]
+        },
+        options: hbarOpts(true)
+      });
+    }
+
+    function renderAll() {
+      renderCards();
+      renderSummary();
+      renderTop5();
+      renderCountry();
+      renderAdvPerf();
+      renderBudget();
+      renderProfit();
+      renderBrands();
+      renderBrandPerf();
+      renderBrandProfit();
+    }
+
+    /* Toggles interactivos */
+    document.querySelectorAll('#ctyToggle button').forEach(b => b.addEventListener('click', () => {
+      state.ctyMetric = b.dataset.m;
+      document.querySelectorAll('#ctyToggle button').forEach(x => x.classList.toggle('active', x === b));
+      renderCountry();
+    }));
+
+    document.querySelectorAll('#advToggle button').forEach(b => b.addEventListener('click', () => {
+      state.advMetric = b.dataset.m;
+      document.querySelectorAll('#advToggle button').forEach(x => x.classList.toggle('active', x === b));
+      renderAdvPerf();
+    }));
+
+    document.querySelectorAll('#brandToggle button').forEach(b => b.addEventListener('click', () => {
+      state.brandMetric = b.dataset.m;
+      document.querySelectorAll('#brandToggle button').forEach(x => x.classList.toggle('active', x === b));
+      renderBrandPerf();
+    }));
+
+    renderAll();
+  </script>
+</body>
+
+</html>
