@@ -15,8 +15,8 @@
   .wrap{max-width:1560px; margin:0 auto;}
   h2.main-title{text-align:center; font-size:20px; font-weight:700; margin:6px 0 20px; color:var(--ink); letter-spacing:0.5px;}
 
-  /* Tarjetas KPI Superiores */
-  .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;}
+  /* Tarjetas KPI Superiores (5 Tarjetas) */
+  .cards{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:20px;}
   .card{background:var(--card); border-radius:14px; padding:18px 18px 14px; box-shadow:0 1px 3px rgba(16,24,40,.05); min-height:118px; display:flex; flex-direction:column;}
   .card .lbl{font-size:11px; letter-spacing:.6px; color:var(--muted); text-transform:uppercase; font-weight:600;}
   .card .val{font-size:32px; font-weight:750; margin-top:8px;}
@@ -45,7 +45,9 @@
   .bar-wrap{position:relative; height:260px;}
   .top5 td,.top5 th{padding:7px 10px;}
   .num{font-variant-numeric:tabular-nums;}
-  @media (max-width:1100px){ .cards{grid-template-columns:repeat(2,1fr);} .grid2{grid-template-columns:1fr;} }
+  @media (max-width:1300px){ .cards{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:850px){ .cards{grid-template-columns:repeat(2,1fr);} .grid2{grid-template-columns:1fr;} }
+  @media (max-width:550px){ .cards{grid-template-columns:1fr;} }
 </style>
 <!-- Chart.js v4.4.3 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -55,7 +57,7 @@
 
   <h2 class="main-title">ADVERTISER REPORT September 1-9</h2>
 
-  <!-- ==================== 0. TARJETAS SUPERIORES CON KPIS Y RUN RATE ==================== -->
+  <!-- ==================== 0. TARJETAS SUPERIORES CON KPIS Y RUN RATE (5 TARJETAS) ==================== -->
   <div class="cards" id="cards"></div>
 
   <!-- ==================== 1. DAILY PERFORMANCE (SEPTIEMBRE 1-9) ==================== -->
@@ -207,7 +209,7 @@ const DATA = {
     {"adv": "ALL IN AFFILIATES", "signups": 26, "ftd": 2, "revenue": 440.00, "budget": 0.00},
     {"adv": "BASHER AGENCY", "signups": 19, "ftd": 3, "revenue": 400.00, "budget": 0.00},
     {"adv": "CHANCED", "signups": 16, "ftd": 0, "revenue": 0.00, "budget": 0.00},
-    {"adv": "COINSROYALE", "signups": 44, "ftd": 3, "revenue": 0.00, "budget": 0.00}, // Suma de COINSROYALE (9) + CoinsRoyale direct (35)
+    {"adv": "COINSROYALE", "signups": 44, "ftd": 3, "revenue": 0.00, "budget": 0.00}, // Unificado (9 + 35)
     {"adv": "EPC", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
     {"adv": "GAMETIME DIGITAL", "signups": 276, "ftd": 11, "revenue": 1665.00, "budget": 0.00},
     {"adv": "IMPACT", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
@@ -245,7 +247,7 @@ const DATA = {
     {"brand": "Luckyvibe", "signups": 8, "ftd": 0, "revenue": 0.00, "budget": 0.00},
     {"brand": "PrizeFlow sweeps LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
     {"brand": "Go Go Gold Win", "signups": 1, "ftd": 0, "revenue": 0.00, "budget": 0.00},
-    {"brand": "CoinsRoyale", "signups": 44, "ftd": 3, "revenue": 0.00, "budget": 450.00}, // Todas las que contienen "coinsroyale" unificadas
+    {"brand": "CoinsRoyale", "signups": 44, "ftd": 3, "revenue": 0.00, "budget": 450.00}, // Todas las Coins Royale unificadas
     {"brand": "Wannnasee USA LP", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
     {"brand": "Winning4Fun", "signups": 0, "ftd": 0, "revenue": 0.00, "budget": 0.00},
     {"brand": "McLuck", "signups": 1, "ftd": 0, "revenue": 0.00, "budget": 0.00},
@@ -307,7 +309,7 @@ function selSummary(){
   return DATA.summary.filter(s => state.advs.has(s.adv));
 }
 
-/* ---------- 0. Top Cards (Totales y Run Rate proyectado a 30 días) ---------- */
+/* ---------- 0. Top Cards (5 Tarjetas con KPIs y Run Rate a 30 días) ---------- */
 function renderCards(){
   const tot = DATA.brands.reduce((a, r) => ({
     signups: a.signups + r.signups,
@@ -317,12 +319,14 @@ function renderCards(){
     profit: a.profit + (r.revenue - r.budget)
   }), {signups: 0, ftd: 0, revenue: 0, budget: 0, profit: 0});
 
+  // Factor Run Rate: (Total actual / 9 días) * 30 días
   const factor = DATA.daysInMonth / DATA.daysElapsed;
 
   const kpi = {
-    signups: 1850,
-    ftd: 370,
+    signups: 1750,
+    ftd: 360,
     revenue: 23100,
+    budget: 7700,
     profit: 15400
   };
 
@@ -330,6 +334,7 @@ function renderCards(){
     signups: Math.round(tot.signups * factor),
     ftd: Math.round(tot.ftd * factor),
     revenue: Math.round(tot.revenue * factor),
+    budget: Math.round(tot.budget * factor),
     profit: Math.round(tot.profit * factor)
   };
 
@@ -362,6 +367,17 @@ function renderCards(){
         kpi: fmtMoney(kpi.revenue),
         rr: fmtMoney(rr.revenue),
         rrCls: rr.revenue >= kpi.revenue ? 'green' : 'red'
+      }
+    },
+    {
+      lbl: 'BUDGET',
+      val: fmtMoney(tot.budget),
+      accent: 'var(--teal)',
+      sub: {
+        kpi: fmtMoney(kpi.budget),
+        rr: fmtMoney(rr.budget),
+        // Si el RR es menor al KPI va en rojo, de lo contrario en verde:
+        rrCls: rr.budget >= kpi.budget ? 'green' : 'red'
       }
     },
     {
@@ -402,8 +418,9 @@ function renderDaily(){
   const avg = arr => arr.reduce((a,b) => a + b, 0) / n;
   const f1 = v => (Math.round(v * 10) / 10).toLocaleString('en-US');
 
-  const kpiSignupsDay = 1850 / 30; // 61.7/día
-  const kpiFtdDay = 370 / 30;       // 12.3/día
+  // Metas diarias con KPIs actualizados (1750/30, 360/30, 23100/30)
+  const kpiSignupsDay = 1750 / 30; // 58.3/día
+  const kpiFtdDay = 360 / 30;       // 12.0/día
   const kpiRevDay = 23100 / 30;     // 770/día
 
   const dashed = (label, color, val, yAxisID) => ({
